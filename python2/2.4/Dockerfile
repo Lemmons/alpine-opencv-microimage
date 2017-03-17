@@ -2,7 +2,7 @@
 FROM alpine:3.5
 
 #2 patch sysctl issue
-ADD 2.4.13.patch /tmp/
+ADD sysctl.patch /tmp/
 
 #3 Add Edge and bleeding repos
 # add the edge repositories
@@ -39,7 +39,7 @@ RUN apk update \
  && wget -O opencv-2.4.13.2.tar.gz https://github.com/opencv/opencv/archive/2.4.13.2.tar.gz \
  && tar -xzf opencv-2.4.13.2.tar.gz \
  && cd /tmp/opencv-2.4.13.2 \
- && patch -p1 < /tmp/2.4.13.patch \
+ && patch -p1 < /tmp/sysctl.patch \
  && mkdir build \
  && cd build \
  && CC=/usr/bin/clang CXX=/usr/bin/clang++ cmake \
@@ -55,7 +55,7 @@ RUN apk update \
 && make -j2 \
 && make install \
 && cd / \
-&& rm -rf /tmp/opencv-2.4.13.2* /tmp/2.4.13.patch \
+&& rm -rf /tmp/opencv-2.4.13.2* /tmp/sysctl.patch \
 && apk del \
       build-base \
       clang \
